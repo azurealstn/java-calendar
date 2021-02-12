@@ -33,16 +33,16 @@ public class Prompt {
 			System.out.println("월을 입력하세요.exit: -1");
 			System.out.print("MONTH>");
 			month = sc.nextInt();
-			System.out.println("첫번째 요일을 입력하세요. (SU, MO, TU, WE, TH, FR, SA)");
-			String str_weekday = sc.next();
-			weekday = parseDay(str_weekday);
-			System.out.println(weekday + ", " + str_weekday);
+			//System.out.println("첫번째 요일을 입력하세요. (SU, MO, TU, WE, TH, FR, SA)");
+			//String str_weekday = sc.next();
+			//weekday = parseDay(str_weekday);
+			//System.out.println(weekday + ", " + str_weekday);
 			if (month == -1 || year == -1)
 				break;
 			// int[] maxDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 			if (month < 1 || month > 12)
 				continue;
-			calc.printCalendar(year, month, weekday);
+			calc.printCalendar(year, month);
 		}
 		System.out.println("Over!");
 		sc.close();
