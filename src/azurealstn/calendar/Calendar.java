@@ -25,10 +25,16 @@ public class Calendar {
 		//month를 입력받아 그 month달의 최대 day(일수)를 출력
 		Scanner sc = new Scanner(System.in);
 		Calendar calc = new Calendar(); //생성자 생성
-		System.out.println("월을 입력하세요.");
-		int month = sc.nextInt();
-		//int[] maxDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-		System.out.printf("%d월은 %d일까지 있습니다. \n", month, calc.getMaxDaysOfMonth(month));
+		
+		System.out.println("반복 횟수를 입력하세요.");
+		int repeat = sc.nextInt();
+		for (int i = 0; i < repeat; i++) {
+			System.out.println("월을 입력하세요.");
+			int month = sc.nextInt();
+			//int[] maxDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+			System.out.printf("%d월은 %d일까지 있습니다. \n", month, calc.getMaxDaysOfMonth(month));
+		}
+		System.out.println("Over!");
 		sc.close();
 	}
 }
