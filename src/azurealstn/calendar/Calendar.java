@@ -1,19 +1,25 @@
 package azurealstn.calendar;
 
-import java.util.Scanner;
-
 public class Calendar {
 	
 	//2월 달력
-	public void printCalendar(int year, int month) {
+	public void printCalendar(int year, int month, int weekday) {
 		System.out.printf("    <<%4d년%3d월>>\n", year, month);
 		System.out.println(" SU MO TU WE TH FR SA");
 		System.out.println(" --------------------");
-		
+		for (int i = 0; i < weekday; i++) {
+			System.out.print("   ");
+		}
 		int maxDay = getMaxDaysOfMonth(year, month);
-		for (int i = 1; i <= maxDay; i++) {
+		int count = 7 - weekday;
+		
+		for (int i = 1; i <= count; i++) {
 			System.out.printf("%3d", i);
-			if (i % 7 == 0) System.out.println();
+		}
+		System.out.println();
+		for (int i = count + 1; i <= maxDay; i++) {
+			System.out.printf("%3d", i);
+			if (i % 7 == 7 - weekday) System.out.println();
 			
 		}
 		System.out.println();
