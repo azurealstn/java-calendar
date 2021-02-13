@@ -1,5 +1,6 @@
 package azurealstn.calendar;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Scanner;
 
@@ -38,7 +39,7 @@ public class Prompt {
 		}
 	}
 
-	public void runPrompt() throws ParseException {
+	public void runPrompt() throws ParseException, IOException {
 		printMenu();
 		// month를 입력받아 그 month달의 최대 day(일수)를 출력
 		Scanner sc = new Scanner(System.in);
@@ -97,11 +98,12 @@ public class Prompt {
 		System.out.println("[새 일정 검색]");
 		System.out.println("날짜를 입력해 주세요 (yyyy-MM-dd).");
 		String date = sc.next();
-		String plan = calc.searchPlan(date);
-		System.out.println(plan);
+		PlanItem plan = calc.searchPlan(date);
+		if (plan != null) System.out.println(plan.detail);
+		else System.out.println("일정이 없습니다.");
 	}
 
-	private void cmdRegister(Scanner sc, Calendar calc) throws ParseException {
+	private void cmdRegister(Scanner sc, Calendar calc) throws ParseException, IOException {
 		System.out.println("[새 일정 등록]");
         System.out.println("날짜를 입력해 주세요 (yyyy-MM-dd).");
         String date = sc.next();
@@ -112,7 +114,7 @@ public class Prompt {
         calc.registerPlan(date, text);
 	}
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException, IOException {
 		//쉘 실행
 		Prompt pt = new Prompt();
 		pt.runPrompt();

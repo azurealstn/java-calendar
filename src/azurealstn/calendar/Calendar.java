@@ -1,9 +1,14 @@
 package azurealstn.calendar;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Calendar {
 	
@@ -59,28 +64,47 @@ public class Calendar {
 	}
 	
 
-	private final int[] MAX_DAYS = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-	private final int[] LEAP_MAX_DAYS = {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	private static final int[] MAX_DAYS = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	private static final int[] LEAP_MAX_DAYS = {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	private static final String SAVEFILE = "calendar.dat";
 	
-	private HashMap<Date, String> planMap;
+	private HashMap<Date, PlanItem> planMap;
 	
 	//생성자
-	public Calendar() {
-		planMap = new HashMap<Date, String>(); //검색 기능
+	public Calendar() throws FileNotFoundException, ParseException {
+		planMap = new HashMap<Date, PlanItem>(); //검색 기능
+		
+		//저장 불러오기
+		File f = new File(SAVEFILE);
+		if (!f.exists()) return;
+		Scanner sc = new Scanner(f);
+		while (sc.hasNext()) {
+			String line = sc.nextLine();
+			String[] words = line.split(",");
+			String date = words[0];
+			String detail = words[1].replaceAll("\"", "");
+			PlanItem p = new PlanItem(date, detail);
+			planMap.put(p.getDate(), p);
+		}
+		sc.close();
 	}
 	
 	//일정 등록
-	public void registerPlan(String strDate, String plan) throws ParseException {
-		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-		//System.out.println(date);
-		planMap.put(date, plan);
+	public void registerPlan(String strDate, String plan) throws ParseException, IOException {
+		PlanItem p = new PlanItem(strDate, plan);
+		planMap.put(p.getDate(), p);
+		
+		File f = new File(SAVEFILE);
+		String item = p.saveString();
+		FileWriter fw = new FileWriter(f, true);
+		fw.write(item);
+		fw.close();
 	}
 	
 	//검색 기능
-	public String searchPlan(String strDate) throws ParseException {
-		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-		String plan = planMap.get(date);
-		return plan;
+	public PlanItem searchPlan(String strDate) throws ParseException {
+		Date date = PlanItem.getDatefromString(strDate);
+		return planMap.get(date);
 	}
 	
 	//윤년인지 아닌지 boolean 타입
@@ -98,7 +122,7 @@ public class Calendar {
 		}
 	}
 	
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException, IOException {
 		Calendar calc = new Calendar();
 		System.out.println(calc.getWeekday(1970, 1, 1) == 4);
 		System.out.println(calc.getWeekday(1971, 1, 1) == 5);
